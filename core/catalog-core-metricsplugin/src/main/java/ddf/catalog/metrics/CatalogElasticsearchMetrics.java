@@ -38,9 +38,15 @@ import org.apache.shiro.SecurityUtils;
 import org.codice.ddf.configuration.ConfigurationManager;
 import org.codice.ddf.configuration.ConfigurationWatcher;
 import org.elasticsearch.action.admin.indices.template.put.PutIndexTemplateRequest;
+import org.elasticsearch.action.bulk.BulkProcessor;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.unit.ByteSizeValue;
+import org.elasticsearch.common.unit.TimeValue;
 import org.geotools.filter.text.cql2.CQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,6 +82,8 @@ public final class CatalogElasticsearchMetrics implements PreQueryPlugin, PostQu
 
     private Client client;
 
+    private BulkProcessor bulkProcessor;
+
     private FilterAdapter filterAdapter;
 
     private String localSourceId;
@@ -97,6 +105,28 @@ public final class CatalogElasticsearchMetrics implements PreQueryPlugin, PostQu
         client.admin().indices().putTemplate(new PutIndexTemplateRequest(CATALOG_METRICS + "-template")
                 .template(CATALOG_METRICS + "*")
                 .mapping("_default_", catalogMetricsMapping)).actionGet();
+
+        bulkProcessor = BulkProcessor.builder(client, new BulkProcessor.Listener() {
+            @Override
+            public void beforeBulk(long executionId, BulkRequest request) {
+
+            }
+
+            @Override
+            public void afterBulk(long executionId, BulkRequest request, Throwable failure) {
+                LOGGER.warn("Can't write metrics to ES", failure);
+            }
+
+            @Override
+            public void afterBulk(long executionId, BulkRequest request, BulkResponse response) {
+
+            }
+        })
+        .setBulkActions(1000)
+        .setConcurrentRequests(1)
+        .setBulkSize(ByteSizeValue.parseBytesSizeValue("5mb"))
+        .setFlushInterval(TimeValue.timeValueSeconds(5))
+        .build();
     }
 
     // PostQuery
@@ -130,7 +160,7 @@ public final class CatalogElasticsearchMetrics implements PreQueryPlugin, PostQu
 
                 LOGGER.info("Adding metrics to ES");
                 Date date = new Date();
-                client.prepareIndex(getIndexName(date), "query").setSource(
+                bulkProcessor.add(new IndexRequest(getIndexName(date), "query").source(
                         jsonBuilder().startObject()
                                 .field("cql", cql)
                                 .field("location", getGeoPoints(shapes))
@@ -151,7 +181,7 @@ public final class CatalogElasticsearchMetrics implements PreQueryPlugin, PostQu
                                 .field("case_sensitive_bool", queryType.isCaseSensitive())
                                 .field("temporal_bool", queryType.isTemporal())
                                 .endObject()
-                ).execute().actionGet();
+                ));
             } catch (UnsupportedQueryException | IOException e) {
                 // ignore filters not supported by the QueryTypeFilterDelegate
             }
@@ -283,8 +313,13 @@ public final class CatalogElasticsearchMetrics implements PreQueryPlugin, PostQu
     }
 
     public void destroy() {
+        LOGGER.info("Disconnecting from ES");
+
+        if (bulkProcessor != null) {
+            bulkProcessor.close();
+        }
+
         if (client != null) {
-            LOGGER.info("Disconnecting from ES");
             client.close();
         }
     }
