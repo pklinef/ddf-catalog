@@ -14,9 +14,11 @@
  **/
 package ddf.catalog.metrics;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 import org.codice.ddf.configuration.ConfigurationManager;
@@ -44,6 +46,7 @@ import ddf.catalog.plugin.PreQueryPlugin;
 import ddf.catalog.plugin.StopProcessingException;
 import ddf.catalog.source.SourceUnavailableException;
 import ddf.catalog.source.UnsupportedQueryException;
+import org.elasticsearch.metrics.ElasticsearchReporter;
 
 /**
  * Catalog plug-in to capture metrics on catalog operations.
@@ -67,6 +70,8 @@ public final class CatalogMetrics implements PreQueryPlugin, PostQueryPlugin, Po
 
     protected final JmxReporter reporter = JmxReporter.forRegistry(metrics)
             .inDomain("ddf.metrics.catalog").build();
+
+    private ElasticsearchReporter esReporter;
 
     private FilterAdapter filterAdapter;
 
@@ -132,6 +137,14 @@ public final class CatalogMetrics implements PreQueryPlugin, PostQueryPlugin, Po
         resourceRetrival = metrics.meter(MetricRegistry.name(RESOURCE_SCOPE));
 
         reporter.start();
+
+        try {
+            esReporter = ElasticsearchReporter.forRegistry(metrics)
+                    .hosts("localhost:9200").build();
+            esReporter.start(60, TimeUnit.SECONDS);
+        } catch (IOException e) {
+            // failed to create reporter...oops
+        }
     }
 
     // PostQuery

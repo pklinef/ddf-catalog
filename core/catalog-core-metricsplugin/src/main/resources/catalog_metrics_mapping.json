@@ -1,0 +1,79 @@
+{
+  "_source": {
+    "enabled": true
+  },
+  "date_detection": false,
+  "properties": {
+    "location": {
+      "type": "geo_point"
+    }
+  },
+  "dynamic_templates": [
+    {
+      "dates": {
+        "match": "*_date",
+        "mapping": {
+          "store": false,
+          "index": "not_analyzed",
+          "type": "date",
+          "format": "date_time"
+        }
+      }
+    },
+    {
+      "points": {
+        "match": "*_point",
+        "mapping": {
+          "type": "geo_point"
+        }
+      }
+    },
+    {
+      "booleans": {
+        "match": "*_bool",
+        "mapping": {
+          "store": false,
+          "type": "boolean"
+        }
+      }
+    },
+    {
+      "longs": {
+        "match": "*_long",
+        "mapping": {
+          "store": false,
+          "type": "long"
+        }
+      }
+    },
+    {
+      "ints": {
+        "match": "*_int",
+        "mapping": {
+          "store": false,
+          "type": "int"
+        }
+      }
+    },
+    {
+      "doubles": {
+        "match": "*_dbl",
+        "mapping": {
+          "store": false,
+          "type": "double"
+        }
+      }
+    },
+    {
+      "default_field": {
+        "match": "*",
+        "match_mapping_type": "string",
+        "mapping": {
+          "store": false,
+          "index": "not_analyzed",
+          "type": "string"
+        }
+      }
+    }
+  ]
+}
