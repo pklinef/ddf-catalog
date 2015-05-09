@@ -1,0 +1,160 @@
+[
+  {
+    "_index": ".kibana",
+    "_type": "dashboard",
+    "_id": "Query-Dashboard",
+    "_score": 0,
+    "_source": {
+      "title": "Query Dashboard",
+      "hits": 0,
+      "description": "",
+      "panelsJSON": "[{\"col\":3,\"id\":\"Queried-Locations\",\"row\":1,\"size_x\":10,\"size_y\":4,\"type\":\"visualization\"},{\"col\":1,\"id\":\"Query-Count\",\"row\":1,\"size_x\":2,\"size_y\":4,\"type\":\"visualization\"},{\"col\":1,\"id\":\"Features-Used\",\"row\":5,\"size_x\":4,\"size_y\":2,\"type\":\"visualization\"},{\"col\":5,\"id\":\"Top-10-search-terms\",\"row\":5,\"size_x\":4,\"size_y\":2,\"type\":\"visualization\"},{\"col\":9,\"id\":\"Popular-properties\",\"row\":5,\"size_x\":4,\"size_y\":2,\"type\":\"visualization\"},{\"col\":1,\"id\":\"Query-Histogram\",\"row\":7,\"size_x\":12,\"size_y\":2,\"type\":\"visualization\"}]",
+      "version": 1,
+      "kibanaSavedObjectMeta": {"searchSourceJSON": "{\"filter\":[{\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}}}]}"}
+    }
+  },
+  {
+    "_index": ".kibana",
+    "_type": "visualization",
+    "_id": "Average-Latency",
+    "_score": 0,
+    "_source": {
+      "title": "Average Latency",
+      "visState": "{\"type\":\"line\",\"params\":{\"shareYAxis\":true,\"addTooltip\":true,\"addLegend\":true,\"defaultYExtents\":false},\"aggs\":[{\"id\":\"1\",\"type\":\"avg\",\"schema\":\"metric\",\"params\":{\"field\":\"mean\"}},{\"id\":\"2\",\"type\":\"date_histogram\",\"schema\":\"segment\",\"params\":{\"field\":\"@timestamp\",\"interval\":\"minute\",\"min_doc_count\":1,\"extended_bounds\":{}}}],\"listeners\":{}}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {"searchSourceJSON": "{\"index\":\"metrics-*\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"}
+    }
+  },
+  {
+    "_index": ".kibana",
+    "_type": "dashboard",
+    "_id": "Latency",
+    "_score": 0,
+    "_source": {
+      "title": "Latency",
+      "hits": 0,
+      "description": "",
+      "panelsJSON": "[{\"col\":1,\"id\":\"Average-Latency\",\"row\":1,\"size_x\":12,\"size_y\":3,\"type\":\"visualization\"},{\"col\":1,\"id\":\"p75-Latency\",\"row\":4,\"size_x\":4,\"size_y\":2,\"type\":\"visualization\"},{\"col\":5,\"id\":\"p95-Latency\",\"row\":4,\"size_x\":4,\"size_y\":2,\"type\":\"visualization\"},{\"col\":9,\"id\":\"p99-Latency\",\"row\":4,\"size_x\":4,\"size_y\":2,\"type\":\"visualization\"}]",
+      "version": 1,
+      "kibanaSavedObjectMeta": {"searchSourceJSON": "{\"filter\":[{\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}}}]}"}
+    }
+  },
+  {
+    "_index": ".kibana",
+    "_type": "visualization",
+    "_id": "p75-Latency",
+    "_score": 0,
+    "_source": {
+      "title": "p75 Latency",
+      "visState": "{\"type\":\"metric\",\"params\":{\"fontSize\":60},\"aggs\":[{\"id\":\"1\",\"type\":\"avg\",\"schema\":\"metric\",\"params\":{\"field\":\"p75\"}}],\"listeners\":{}}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {"searchSourceJSON": "{\"index\":\"metrics-*\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"}
+    }
+  },
+  {
+    "_index": ".kibana",
+    "_type": "visualization",
+    "_id": "p95-Latency",
+    "_score": 0,
+    "_source": {
+      "title": "p95 Latency",
+      "visState": "{\"type\":\"metric\",\"params\":{\"fontSize\":60},\"aggs\":[{\"id\":\"1\",\"type\":\"avg\",\"schema\":\"metric\",\"params\":{\"field\":\"p95\"}}],\"listeners\":{}}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {"searchSourceJSON": "{\"index\":\"metrics-*\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"}
+    }
+  },
+  {
+    "_index": ".kibana",
+    "_type": "visualization",
+    "_id": "p99-Latency",
+    "_score": 0,
+    "_source": {
+      "title": "p99 Latency",
+      "visState": "{\"type\":\"metric\",\"params\":{\"fontSize\":60},\"aggs\":[{\"id\":\"1\",\"type\":\"avg\",\"schema\":\"metric\",\"params\":{\"field\":\"p99\"}}],\"listeners\":{}}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {"searchSourceJSON": "{\"index\":\"metrics-*\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"}
+    }
+  },
+  {
+    "_index": ".kibana",
+    "_type": "visualization",
+    "_id": "Features-Used",
+    "_score": 0,
+    "_source": {
+      "title": "Features Used",
+      "visState": "{\"aggs\":[{\"id\":\"1\",\"params\":{},\"schema\":\"metric\",\"type\":\"count\"},{\"id\":\"2\",\"params\":{\"field\":\"features\",\"order\":\"desc\",\"orderBy\":\"1\",\"size\":10},\"schema\":\"segment\",\"type\":\"terms\"}],\"listeners\":{},\"params\":{\"addLegend\":true,\"addTooltip\":true,\"defaultYExtents\":false,\"mode\":\"stacked\",\"shareYAxis\":true},\"type\":\"histogram\"}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {"searchSourceJSON": "{\"index\":\"catalog-metrics-*\",\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}},\"filter\":[]}"}
+    }
+  },
+  {
+    "_index": ".kibana",
+    "_type": "visualization",
+    "_id": "Queried-Locations",
+    "_score": 0,
+    "_source": {
+      "title": "Queried Locations",
+      "visState": "{\"aggs\":[{\"id\":\"1\",\"params\":{},\"schema\":\"metric\",\"type\":\"count\"},{\"id\":\"2\",\"params\":{\"field\":\"location\",\"precision\":2},\"schema\":\"segment\",\"type\":\"geohash_grid\"}],\"listeners\":{},\"params\":{\"isDesaturated\":true,\"mapType\":\"Shaded Circle Markers\"},\"type\":\"tile_map\"}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {"searchSourceJSON": "{\"index\":\"catalog-metrics-*\",\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}},\"filter\":[]}"}
+    }
+  },
+  {
+    "_index": ".kibana",
+    "_type": "visualization",
+    "_id": "Query-Count",
+    "_score": 0,
+    "_source": {
+      "title": "Query Count",
+      "visState": "{\"type\":\"metric\",\"params\":{\"fontSize\":60},\"aggs\":[{\"id\":\"1\",\"type\":\"count\",\"schema\":\"metric\",\"params\":{}}],\"listeners\":{}}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {"searchSourceJSON": "{\"index\":\"catalog-metrics-*\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"}
+    }
+  },
+  {
+    "_index": ".kibana",
+    "_type": "visualization",
+    "_id": "Top-10-Search-Terms",
+    "_score": 0,
+    "_source": {
+      "title": "Top 10 Search Terms",
+      "visState": "{\"aggs\":[{\"id\":\"1\",\"params\":{},\"schema\":\"metric\",\"type\":\"count\"},{\"id\":\"2\",\"params\":{\"field\":\"terms\",\"order\":\"desc\",\"orderBy\":\"1\",\"size\":10},\"schema\":\"segment\",\"type\":\"terms\"}],\"listeners\":{},\"params\":{\"addLegend\":true,\"addTooltip\":true,\"defaultYExtents\":false,\"mode\":\"stacked\",\"shareYAxis\":true},\"type\":\"histogram\"}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {"searchSourceJSON": "{\"index\":\"catalog-metrics-*\",\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}},\"filter\":[]}"}
+    }
+  },
+  {
+    "_index": ".kibana",
+    "_type": "visualization",
+    "_id": "Top-10-Attributes",
+    "_score": 0,
+    "_source": {
+      "title": "Top 10 Attributes",
+      "visState": "{\"type\":\"histogram\",\"params\":{\"addLegend\":true,\"addTooltip\":true,\"defaultYExtents\":false,\"mode\":\"stacked\",\"shareYAxis\":true},\"aggs\":[{\"id\":\"1\",\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"property_names\",\"size\":10,\"order\":\"desc\",\"orderBy\":\"1\"}}],\"listeners\":{}}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {"searchSourceJSON": "{\"index\":\"catalog-metrics-*\",\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}},\"filter\":[]}"}
+    }
+  },
+  {
+    "_index": ".kibana",
+    "_type": "visualization",
+    "_id": "Query-Histogram",
+    "_score": 0,
+    "_source": {
+      "title": "Query Histogram",
+      "visState": "{\"type\":\"histogram\",\"params\":{\"shareYAxis\":true,\"addTooltip\":true,\"addLegend\":true,\"mode\":\"stacked\",\"defaultYExtents\":false},\"aggs\":[{\"id\":\"1\",\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"type\":\"date_histogram\",\"schema\":\"segment\",\"params\":{\"field\":\"timestamp_date\",\"interval\":\"auto\",\"min_doc_count\":1,\"extended_bounds\":{}}}],\"listeners\":{}}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {"searchSourceJSON": "{\"index\":\"catalog-metrics-*\",\"query\":{\"query_string\":{\"query\":\"*\",\"analyze_wildcard\":true}},\"filter\":[]}"}
+    }
+  }
+]
